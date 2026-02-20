@@ -72,8 +72,13 @@
           "href": "https://github.com/jsonpages"
         },
         {
-          "label": "Changelog",
-          "href": "#"
+          "label": "Privacy",
+          "href": "/privacy"
+        },
+        {
+          "id": "5d5132e1-cb09-4457-9ccc-b3b0def6c8db",
+          "label": "Terms&Conditions",
+          "href": "/terms"
         }
       ]
     },
