@@ -1,0 +1,233 @@
+{
+  "id": "home-page",
+  "slug": "home",
+  "meta": {
+    "title": "JsonPages — The Sovereign Shell. Zero Runtime Overhead.",
+    "description": "The @jsonpages/core package is a headless, schema-driven runtime. It handles routing, hydration, and the admin interface, leaving your Tenant code pure and framework-agnostic."
+  },
+  "sections": [
+    {
+      "id": "hero-main",
+      "type": "hero",
+      "data": {
+        "badge": "Architecture v1.2",
+        "title": "The Sovereign Shell.",
+        "titleHighlight": "Zero Runtime Overhead.",
+        "description": "The @jsonpages/core package is a headless, schema-driven runtime. It handles routing, hydration, and the admin interface, leaving your Tenant code pure and framework-agnostic.",
+        "ctas": [
+          {
+            "id": "cta-1",
+            "label": "Read the Docs",
+            "href": "/docs",
+            "variant": "primary"
+          },
+          {
+            "id": "cta-2",
+            "label": "View on NPM",
+            "href": "https://www.npmjs.com/org/jsonpages",
+            "variant": "secondary"
+          }
+        ],
+        "metrics": [
+          {
+            "id": "m-1",
+            "val": "3KB",
+            "label": "Core Overhead"
+          },
+          {
+            "id": "m-2",
+            "val": "100%",
+            "label": "Type Safety"
+          },
+          {
+            "id": "m-3",
+            "val": "MIT",
+            "label": "License"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    {
+      "id": "soc-section",
+      "type": "arch-layers",
+      "data": {
+        "anchorId": "architecture",
+        "label": "Architecture",
+        "title": "Separation of Concerns",
+        "description": "We enforce a strict boundary between the Engine (us) and the Tenant (you). This prevents vendor lock-in.",
+        "layers": [
+          {
+            "id": "layer-3",
+            "number": "3",
+            "layerLevel": "l2",
+            "title": "The Form Factory",
+            "description": "The Admin UI is not hardcoded. It is generated at runtime by analyzing your Zod schemas. Change the schema, change the UI."
+          },
+          {
+            "id": "layer-2",
+            "number": "2",
+            "layerLevel": "l1",
+            "title": "The Tenant Protocol (TBP)",
+            "description": "Your components live here. They receive pure JSON data. They do not know they are being edited. They just render."
+          },
+          {
+            "id": "layer-1",
+            "number": "1",
+            "layerLevel": "l0",
+            "title": "The Core Engine (@jsonpages/core)",
+            "description": "Handles the React rendering loop, routing, and the Studio iframe injection. It is completely agnostic of your design system."
+          }
+        ],
+        "codeLines": []
+      },
+      "settings": {}
+    },
+    {
+      "id": "cms-ice-section",
+      "type": "cms-ice",
+      "data": {
+        "anchorId": "cms",
+        "label": "In-Context Editing",
+        "title": "The Inspector that only shows what you need.",
+        "description": "Traditional CMS sidebars dump every field at once. ICE binds to the section you click in the live canvas and shows only the fields for that block. Zero cognitive overhead. The Form Factory generates every input widget automatically from your Zod schema — change the schema, change the UI.",
+        "callouts": [
+          {
+            "id": "cl-1",
+            "icon": "🎯",
+            "title": "Context-bound Inspector",
+            "description": "Click any section in the canvas. The Inspector shows exactly — and only — the fields for that block. No sidebar overload."
+          },
+          {
+            "id": "cl-2",
+            "icon": "⚡",
+            "title": "Schema → UI, automatically",
+            "description": "The Admin UI is not hardcoded. It is generated at runtime by analyzing your Zod schemas. Change the schema, change the UI."
+          },
+          {
+            "id": "cl-3",
+            "icon": "📤",
+            "title": "Bake to Zero-Runtime HTML",
+            "description": "Hit Bake. The engine exports pure HTML/CSS with no JavaScript runtime — CDN-ready, infinitely cacheable, fully portable."
+          }
+        ]
+      },
+      "settings": {}
+    },
+    {
+      "id": "git-section",
+      "type": "git-section",
+      "data": {
+        "anchorId": "git",
+        "label": "Versioning",
+        "title": "Your content is code.",
+        "titleHighlight": "Branch it. Diff it. Roll it back.",
+        "description": "Because every page is a plain JSON file, your content workflow is identical to your code workflow. No database exports, no CMS snapshots, no proprietary backups. Just git.",
+        "points": [
+          {
+            "id": "p-1",
+            "text": "Content changes appear in pull requests like any code change"
+          },
+          {
+            "id": "p-2",
+            "text": "Branch a page, preview it, merge when approved"
+          },
+          {
+            "id": "p-3",
+            "text": "Full diff history on every field of every section"
+          },
+          {
+            "id": "p-4",
+            "text": "Roll back any page to any commit in seconds"
+          },
+          {
+            "id": "p-5",
+            "text": "CI/CD pipelines trigger on content changes, not just code"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    {
+      "id": "devex-section",
+      "type": "devex",
+      "data": {
+        "anchorId": "devex",
+        "label": "Developer Experience",
+        "title": "Your App.tsx is incredibly thin.",
+        "description": "You don't write routing logic. You don't write admin panels. You just import the Engine and pass your configuration.",
+        "features": [
+          {
+            "id": "f-1",
+            "text": "Automatic Routing based on JSON files"
+          },
+          {
+            "id": "f-2",
+            "text": "Hot Module Replacement (HMR)"
+          },
+          {
+            "id": "f-3",
+            "text": "Full TypeScript support"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    {
+      "id": "cli-section",
+      "type": "cli-section",
+      "data": {
+        "anchorId": "cli",
+        "label": "CLI Tool",
+        "title": "A new tenant in under 5 minutes.",
+        "description": "Install the CLI once. From there, scaffolding a fully-typed, production-ready tenant — with all capsules, registry, schemas, and config wired up — is a single command.",
+        "steps": [
+          {
+            "id": "s-1",
+            "num": "1",
+            "title": "Install the CLI globally",
+            "description": "One-time install. The CLI lives alongside your other dev tools."
+          },
+          {
+            "id": "s-2",
+            "num": "2",
+            "title": "Scaffold a new tenant",
+            "description": "Generates the full TBP structure: capsules, registry, schemas, config, and data files — all typed and ready."
+          },
+          {
+            "id": "s-3",
+            "num": "3",
+            "title": "Start building",
+            "description": "Run npm run dev and your tenant is live with Studio, HMR, and full CMS editing."
+          }
+        ]
+      },
+      "settings": {}
+    },
+    {
+      "id": "cta-final",
+      "type": "cta-banner",
+      "data": {
+        "anchorId": "start",
+        "title": "Trust the Architecture.",
+        "description": "Stop building page builders. Start building Systems.",
+        "cliCommand": "npx @jsonpages/cli@latest new tenant",
+        "ctas": [
+          {
+            "id": "cta-docs",
+            "label": "Read the Docs",
+            "href": "/docs",
+            "variant": "primary"
+          },
+          {
+            "id": "cta-npm",
+            "label": "View on NPM",
+            "href": "#",
+            "variant": "secondary"
+          }
+        ]
+      },
+      "settings": {}
+    }
+  ]
+}

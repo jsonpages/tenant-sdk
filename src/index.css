@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+@source "./**/*.tsx";
+
+@theme {
+  /* 
+     🎯 MASTER MAPPING (V2.7 Landing) 
+  */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --font-primary: var(--theme-font-primary);
+  --font-mono: var(--theme-font-mono);
+
+  /* 
+     🔧 DISPLAY FONT — Forward-compatible workaround
+     theme-manager.ts does NOT inject --theme-font-display (Skeleton v2.7 gap).
+     The var() falls through to the hardcoded fallback today.
+     When Skeleton v2.8 wires display into theme-manager, the var() will resolve
+     automatically and the fallback becomes dead code.
+  */
+  --font-display: var(--theme-font-display, 'Playfair Display', Georgia, serif);
+}
+
+/* 
+   🌍 TENANT BRAND TOKENS (JSP 1.5)
+*/
+:root {
+  --background: var(--theme-background);
+  --foreground: var(--theme-text);
+  --card: var(--theme-surface);
+  --card-foreground: var(--theme-text);
+  --primary: var(--theme-primary);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: var(--theme-secondary);
+  --secondary-foreground: var(--theme-text);
+  --muted: var(--theme-surface-alt);
+  --muted-foreground: var(--theme-text-muted);
+  --border: var(--theme-border);
+  --radius: 0.45rem;
+
+  /* 
+     🔧 ACCENT CHAIN — Forward-compatible workaround
+     theme-manager.ts already injects --theme-accent on :root,
+     but the original index.css never bridged it into the semantic layer.
+     This closes the gap: --theme-accent → --accent → --color-accent.
+     Falls back to --theme-primary if accent is undefined.
+  */
+  --accent: var(--theme-accent, var(--theme-primary));
+}
+
+@layer base {
+  * { border-color: var(--border); }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-primary);
+    line-height: 1.7;
+    overflow-x: hidden;
+    @apply antialiased;
+  }
+}
+
+/* ==========================================================================
+   FONT DISPLAY UTILITY
+   Maps .font-display class to the display font family (Playfair Display)
+   ========================================================================== */
+.font-display {
+  font-family: var(--font-display, var(--font-primary));
+}
+
+/* ==========================================================================
+   LANDING ANIMATIONS
+   ========================================================================== */
+@keyframes jp-fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes jp-pulseDot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.jp-animate-in {
+  opacity: 0;
+  animation: jp-fadeUp 0.7s ease forwards;
+}
+.jp-d1 { animation-delay: 0.1s; }
+.jp-d2 { animation-delay: 0.2s; }
+.jp-d3 { animation-delay: 0.3s; }
+.jp-d4 { animation-delay: 0.4s; }
+.jp-d5 { animation-delay: 0.5s; }
+
+.jp-pulse-dot {
+  animation: jp-pulseDot 2s ease infinite;
+}
+
+/* ==========================================================================
+   SMOOTH SCROLL
+   ========================================================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ==========================================================================
+   ICE ADMIN — Section highlight in preview iframe
+   The preview iframe only receives tenant CSS; core's overlay classes
+   (z-[50], absolute, etc.) are not in this build. Define them here so
+   the section highlight is always visible in /admin.
+   ========================================================================== */
+[data-jp-section-overlay] {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  transition: border-color 0.2s, background-color 0.2s;
+  border: 2px solid transparent;
+}
+
+[data-section-id]:hover [data-jp-section-overlay] {
+  border-color: rgba(96, 165, 250, 0.5);
+  border-style: dashed;
+}
+
+[data-section-id][data-jp-selected] [data-jp-section-overlay] {
+  border-color: rgb(37, 99, 235);
+  border-style: solid;
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+[data-jp-section-overlay] > div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.25rem 0.5rem;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgb(37, 99, 235);
+  color: white;
+  transition: opacity 0.2s;
+}
+
+[data-section-id]:hover [data-jp-section-overlay] > div,
+[data-section-id][data-jp-selected] [data-jp-section-overlay] > div {
+  opacity: 1;
+}
+
+[data-section-id] [data-jp-section-overlay] > div {
+  opacity: 0;
+}
+
+

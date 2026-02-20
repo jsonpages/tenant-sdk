@@ -1,0 +1,351 @@
+{
+  "id": "docs-page",
+  "slug": "docs",
+  "meta": {
+    "title": "JsonPages Docs — Onboarding Governance",
+    "description": "Percorso Governance completo: capsule, IDAC, registry, schema, overlay e checklist per integrare il CMS con governance piena."
+  },
+  "sections": [
+    {
+      "id": "docs-main",
+      "type": "docs-layout",
+      "data": {
+        "pageTitle": "Onboarding — Percorso Governance",
+        "pageSubtitle": "Per chi vuole il CMS (Studio, ICE, Form Factory): authoring in-app, tipizzazione forte, governance dei contenuti e dei componenti. Riferimento spec: JSONPAGES Architecture Specifications v1.2 + Appendix A.",
+        "version": "Spec v1.2",
+        "groups": [
+          {
+            "id": "g-1",
+            "anchor": "governance",
+            "label": "1. Governance",
+            "sections": [
+              {
+                "id": "s-1-1",
+                "anchor": "cosa-implica",
+                "title": "Cosa implica \"governance\"",
+                "blocks": [
+                  {
+                    "id": "b-1-1",
+                    "type": "list",
+                    "content": "",
+                    "items": [
+                      { "id": "i-1", "text": "**Tipi:** Ogni section type è dichiarato in `SectionDataRegistry` / `SectionSettingsRegistry` (module augmentation) e in `SectionComponentPropsMap`. Registry e config sono tipizzati." },
+                      { "id": "i-2", "text": "**Schema:** Ogni section type ha uno schema Zod (data, e opzionalmente settings) usato dal Form Factory per generare l'editor nell'Inspector. Gli schema sono aggregati in `SECTION_SCHEMAS`." },
+                      { "id": "i-3", "text": "**Studio/ICE:** L'editor (Inspector) si aggancia al DOM tramite `data-jp-field` e `data-jp-item-id` / `data-jp-item-field`. L'overlay di selezione in iframe richiede che il tenant fornisca il CSS (TOCC)." },
+                      { "id": "i-4", "text": "**Add Section:** Il tenant espone **AddSectionConfig** (tipi addabili, label, default data) così in Studio l'utente può aggiungere section dalla libreria." },
+                      { "id": "i-5", "text": "**Design tokens:** Le View usano variabili CSS (`--local-*`) e nessuna utility nuda (CIP) per coerenza e compatibilità con tema e overlay." }
+                    ]
+                  },
+                  {
+                    "id": "b-1-2",
+                    "type": "callout",
+                    "content": "**Perché servono (in sintesi):** Tipi e schema permettono al Core e al Form Factory di operare senza conoscere i dettagli del Tenant; IDAC permette all'Inspector di legare click in Stage e riga attiva nella sidebar; TOCC rende visibile l'overlay; AddSectionConfig definisce la libreria Aggiungi sezione; token e z-index evitano conflitti con l'UI di editing."
+                  }
+                ]
+              },
+              {
+                "id": "s-1-2",
+                "anchor": "tipizzazione",
+                "title": "Valore della tipizzazione: governance e CMS UX",
+                "tag": "§1.1",
+                "blocks": [
+                  {
+                    "id": "b-2-1",
+                    "type": "paragraph",
+                    "content": "La tipizzazione (tipi TypeScript + schema Zod) serve a **due livelli**: governance (sviluppatore/architettura) e **UX del CMS** (autore che usa Studio). Spesso si menziona solo il primo."
+                  },
+                  {
+                    "id": "b-2-2",
+                    "type": "paragraph",
+                    "content": "**Governance:** registry tipizzato, SectionComponentPropsMap, forma di SiteConfig/PageConfig, audit, code-generation → coerenza tra tenant, niente drift, refactor sicuro, tooling basato su spec."
+                  },
+                  {
+                    "id": "b-2-3",
+                    "type": "paragraph",
+                    "content": "**CMS UX:** lo schema Zod guida il **Form Factory** (quali widget per ogni campo: text, textarea, select, list, icon-picker, **image-picker**); `data-jp-field` e `data-jp-item-id/field` legano click in Stage e form nell'Inspector; **AddSectionConfig** dà tipi addabili, label e default."
+                  },
+                  {
+                    "id": "b-2-4",
+                    "type": "callout",
+                    "content": "Per la governance la tipizzazione garantisce **contratti**; per la CMS UX definisce l'**esperienza di editing** (controlli, label, default, binding). Va specificato entrambi."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g-2",
+            "anchor": "struttura",
+            "label": "2. Struttura progetto",
+            "sections": [
+              {
+                "id": "s-2-1",
+                "anchor": "file-layout",
+                "title": "File e cartelle (completa)",
+                "blocks": [
+                  {
+                    "id": "b-3-1",
+                    "type": "list",
+                    "content": "",
+                    "items": [
+                      { "id": "f-1",  "text": "`src/data/config/site.json` — SiteConfig (identity, pages[], header block, footer block)." },
+                      { "id": "f-2",  "text": "`src/data/config/menu.json` — MenuConfig (`main: MenuItem[]`)." },
+                      { "id": "f-3",  "text": "`src/data/config/theme.json` — ThemeConfig (tokens)." },
+                      { "id": "f-4",  "text": "`src/data/pages/<slug>.json` — PageConfig (slug, meta, sections[])." },
+                      { "id": "f-5",  "text": "`src/components/<sectionType>/` — **Capsula piena:** View.tsx, schema.ts, types.ts, index.ts." },
+                      { "id": "f-6",  "text": "`src/lib/base-schemas.ts` — BaseSectionData, BaseArrayItem, BaseSectionSettingsSchema." },
+                      { "id": "f-7",  "text": "`src/lib/schemas.ts` — SECTION_SCHEMAS (aggregato degli schema data per tipo) + export SectionType." },
+                      { "id": "f-8",  "text": "`src/lib/ComponentRegistry.tsx` — Registry tipizzato: `{ [K in SectionType]: React.FC<SectionComponentPropsMap[K]> }`." },
+                      { "id": "f-9",  "text": "`src/lib/addSectionConfig.ts` — AddSectionConfig (addableSectionTypes, sectionTypeLabels, getDefaultSectionData)." },
+                      { "id": "f-10", "text": "`src/types.ts` — SectionComponentPropsMap, PageConfig, SiteConfig, MenuConfig, ThemeConfig; **module augmentation** per SectionDataRegistry e SectionSettingsRegistry; re-export da `@jsonpages/core`." },
+                      { "id": "f-11", "text": "`src/App.tsx` — Bootstrap: config (tenantId, registry, schemas, pages, siteConfig, themeConfig, menuConfig, themeCss, addSection); `<JsonPagesEngine config={config} />`." },
+                      { "id": "f-12", "text": "**CSS globale** — Include i selettori TOCC per overlay (hover/selected/type label)." }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g-3",
+            "anchor": "componenti",
+            "label": "3. Componenti",
+            "sections": [
+              {
+                "id": "s-3-1",
+                "anchor": "capsule-idac",
+                "title": "Capsule + IDAC + token",
+                "blocks": [
+                  {
+                    "id": "b-4-1",
+                    "type": "list",
+                    "content": "",
+                    "items": [
+                      { "id": "c-1", "text": "**Capsula:** Ogni section type ha View, schema (Zod), types (inferiti), index. Lo schema **data** estende BaseSectionData; gli item degli array estendono BaseArrayItem." },
+                      { "id": "c-2", "text": "**View:** Riceve `data` e `settings` (e `menu` per header). Non importa Zod. Usa **solo** variabili CSS per colori/raggi (`bg-[var(--local-bg)]`), sezione root con `z-index` ≤ 1." },
+                      { "id": "c-3", "text": "**IDAC (ICE):** Su ogni campo scalare editabile: `data-jp-field=\"<fieldKey>\"`. Su ogni item di array: `data-jp-item-id=\"<stableId>\"` e `data-jp-item-field=\"<arrayKey>\"`." },
+                      { "id": "c-4", "text": "**Schema:** Usa il vocabolario UI (ECIP): `.describe('ui:text')`, `ui:textarea`, `ui:select`, `ui:number`, `ui:list`, `ui:icon-picker`, `ui:image-picker`. Array di oggetti editabili: ogni oggetto con `id` (BaseArrayItem)." }
+                    ]
+                  },
+                  {
+                    "id": "b-4-2",
+                    "type": "callout",
+                    "content": "**Perché servono:** `data-jp-field` e `data-jp-item-*` servono perché lo Stage è in un iframe e il Core deve sapere quale campo/item corrisponde al click senza conoscere il DOM del Tenant. Senza IDAC, click sul canvas non si riflette nella sidebar. Vedi spec §6 (IDAC), §5 (ECIP), §4 (CIP)."
+                  }
+                ]
+              },
+              {
+                "id": "s-3-2",
+                "anchor": "image-picker",
+                "title": "Image Picker: uso corretto nello schema",
+                "tag": "§3.1",
+                "blocks": [
+                  {
+                    "id": "b-5-1",
+                    "type": "paragraph",
+                    "content": "Per i **campi immagine** il Form Factory espone il widget **Image Picker** solo se lo schema è modellato correttamente."
+                  },
+                  {
+                    "id": "b-5-2",
+                    "type": "heading",
+                    "content": "Regola"
+                  },
+                  {
+                    "id": "b-5-3",
+                    "type": "list",
+                    "content": "",
+                    "items": [
+                      { "id": "r-1", "text": "Il campo immagine non è una stringa (`z.string()`), ma un **oggetto** con almeno `url` e, opzionalmente, `alt`." },
+                      { "id": "r-2", "text": "Lo **schema di questo oggetto** va marcato con **`.describe('ui:image-picker')`**. Il Form Factory riconosce `ui:image-picker` solo su **ZodObject**, non su campi stringa." }
+                    ]
+                  },
+                  {
+                    "id": "b-5-4",
+                    "type": "heading",
+                    "content": "Esempio (capsula image-break)"
+                  },
+                  {
+                    "id": "b-5-5",
+                    "type": "code",
+                    "codeFilename": "src/components/image-break/schema.ts",
+                    "content": "import { z } from 'zod';\nimport { BaseSectionData } from '@/lib/base-schemas';\n\nconst ImageSelectionSchema = z\n  .object({\n    url: z.string(),\n    alt: z.string().optional(),\n  })\n  .describe('ui:image-picker');\n\nexport const ImageBreakSchema = BaseSectionData.extend({\n  label:   z.string().optional().describe('ui:text'),\n  image:   ImageSelectionSchema.default({ url: '', alt: '' }),\n  caption: z.string().optional().describe('ui:textarea'),\n});"
+                  },
+                  {
+                    "id": "b-5-6",
+                    "type": "paragraph",
+                    "content": "In **View.tsx**: usa `resolveAssetUrl(data.image.url, tenantId)` per il `src` dell'immagine. Aggiungi `data-jp-field=\"image\"` sul nodo corrispondente nel DOM."
+                  },
+                  {
+                    "id": "b-5-7",
+                    "type": "note",
+                    "content": "**Cosa evitare:** Non usare `.describe('ui:image-picker')` su un campo stringa: il widget Image Picker si aspetta un oggetto `{ url, alt? }`. Non dimenticare `data-jp-field=\"image\"` nel DOM, altrimenti il binding Inspector ↔ Stage non funziona."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g-4",
+            "anchor": "dati",
+            "label": "4. Dati",
+            "sections": [
+              {
+                "id": "s-4-1",
+                "anchor": "forma-dati",
+                "title": "Forma e responsabilità",
+                "blocks": [
+                  {
+                    "id": "b-6-1",
+                    "type": "list",
+                    "content": "",
+                    "items": [
+                      { "id": "d-1", "text": "`site.json` / `menu.json` / `theme.json` / `pages/*.json` — Forma esatta come in Appendix A. Sono la source of truth quando l'utente salva da Studio." },
+                      { "id": "d-2", "text": "**Studio** aggiorna il Working Draft; il sync con l'iframe e il Bake usano la stessa struttura. I dati passati a JsonPagesEngine devono essere compatibili con ciò che l'editor modifica." }
+                    ]
+                  },
+                  {
+                    "id": "b-6-2",
+                    "type": "callout",
+                    "content": "Se i dati arrivano da un CMS esterno tocca a te sincronizzare. In ogni caso la **forma** delle pagine (sections con id, type, data, settings) resta quella della spec."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g-5",
+            "anchor": "registry",
+            "label": "5. Registry & Types",
+            "sections": [
+              {
+                "id": "s-5-1",
+                "anchor": "registry-detail",
+                "title": "Registry, schemas, types, addSection",
+                "blocks": [
+                  {
+                    "id": "b-7-1",
+                    "type": "list",
+                    "content": "",
+                    "items": [
+                      { "id": "re-1", "text": "**types.ts:** Unico punto di **module augmentation** e definizione di SectionComponentPropsMap, PageConfig, SiteConfig, MenuConfig, ThemeConfig. Header: `{ data, settings?, menu: MenuItem[] }`; tutti gli altri: `{ data, settings? }`." },
+                      { "id": "re-2", "text": "**ComponentRegistry:** Ogni chiave di SectionType ha il componente corrispondente; tipo: `{ [K in SectionType]: React.FC<SectionComponentPropsMap[K]> }`." },
+                      { "id": "re-3", "text": "**SECTION_SCHEMAS:** Ogni chiave di SectionType ha lo **schema Zod della data** (stesso ordine del registry). Base schemas re-exportati da base-schemas.ts." },
+                      { "id": "re-4", "text": "**addSectionConfig:** addableSectionTypes (solo i tipi che l'utente può aggiungere dalla libreria), sectionTypeLabels, getDefaultSectionData(type) che restituisce `data` valido per quello schema." }
+                    ]
+                  },
+                  {
+                    "id": "b-7-2",
+                    "type": "callout",
+                    "content": "Un solo punto di augmentation (types.ts) e un solo SECTION_SCHEMAS evita duplicazioni. AddSectionConfig è l'unica fonte di verità per quali section si possono aggiungere e con quali default. Vedi spec §9 (ASC), Appendix A.2–A.3."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g-6",
+            "anchor": "overlay",
+            "label": "6. Overlay CSS (TOCC)",
+            "sections": [
+              {
+                "id": "s-6-1",
+                "anchor": "tocc-detail",
+                "title": "Selettori TOCC richiesti",
+                "blocks": [
+                  {
+                    "id": "b-8-1",
+                    "type": "paragraph",
+                    "content": "Il Core inietta il markup dell'overlay (wrapper con `data-section-id`, sibling con `data-jp-section-overlay`). Il **tenant** deve fornire il CSS nel proprio `index.css` per renderlo visibile."
+                  },
+                  {
+                    "id": "b-8-2",
+                    "type": "list",
+                    "content": "",
+                    "items": [
+                      { "id": "t-1", "text": "`[data-jp-section-overlay]` copra la section, `pointer-events: none`, z-index alto (es. 9999)." },
+                      { "id": "t-2", "text": "Hover e selected siano visibili (bordo tratteggiato / pieno, eventuale tint)." },
+                      { "id": "t-3", "text": "Il type label (`[data-jp-section-overlay] > .jp-section-type-label`) sia posizionato e visibile su hover/selected." }
+                    ]
+                  },
+                  {
+                    "id": "b-8-3",
+                    "type": "code",
+                    "codeFilename": "src/index.css — TOCC selectors",
+                    "content": "/* ── TOCC — Tenant Overlay CSS Contract ── */\n[data-jp-section-overlay] {\n  position: absolute;\n  inset: 0;\n  pointer-events: none;\n  z-index: 9999;\n  border: 1.5px dashed transparent;\n  transition: border-color 0.15s, background 0.15s;\n}\n\n[data-jp-section-wrapper]:hover > [data-jp-section-overlay] {\n  border-color: rgba(59, 130, 246, 0.5);\n  background: rgba(59, 130, 246, 0.03);\n}\n\n[data-jp-section-wrapper].jp-selected > [data-jp-section-overlay] {\n  border-color: #3b82f6;\n  border-style: solid;\n  background: rgba(59, 130, 246, 0.05);\n}\n\n[data-jp-section-overlay] > .jp-section-type-label {\n  position: absolute;\n  top: 6px;\n  right: 8px;\n  font-family: 'JetBrains Mono', monospace;\n  font-size: 0.55rem;\n  font-weight: 700;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  background: #3b82f6;\n  color: white;\n  padding: 2px 6px;\n  opacity: 0;\n  transition: opacity 0.15s;\n}\n\n[data-jp-section-wrapper]:hover > [data-jp-section-overlay] > .jp-section-type-label,\n[data-jp-section-wrapper].jp-selected > [data-jp-section-overlay] > .jp-section-type-label {\n  opacity: 1;\n}"
+                  },
+                  {
+                    "id": "b-8-4",
+                    "type": "callout",
+                    "content": "**Perché servono (TOCC):** L'iframe dello Stage carica solo il CSS del Tenant; il Core inietta il markup dell'overlay ma non gli stili. Senza i selettori TOCC, bordo hover/selected e type label non sono visibili. Vedi spec §7 (TOCC)."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g-7",
+            "anchor": "checklist",
+            "label": "7. Checklist",
+            "sections": [
+              {
+                "id": "s-7-1",
+                "anchor": "checklist-table",
+                "title": "Checklist rapida — sviluppo grafico e dati (con CMS)",
+                "blocks": [
+                  {
+                    "id": "b-9-1",
+                    "type": "table",
+                    "content": "",
+                    "rows": [
+                      { "id": "r-1",  "col1": "**Layout / grafico**",   "col2": "View con variabili `--local-*`, z-index ≤ 1, nessuna utility naked." },
+                      { "id": "r-2",  "col1": "**Dati (forma)**",        "col2": "SiteConfig, MenuConfig, ThemeConfig, PageConfig come in Appendix A; JSON in `data/config` e `data/pages`." },
+                      { "id": "r-3",  "col1": "**Capsule**",             "col2": "View + schema (con `ui:*`) + types + index; data schema estende BaseSectionData; array item con id." },
+                      { "id": "r-4",  "col1": "**IDAC**",                "col2": "`data-jp-field` su campi scalari editabili; `data-jp-item-id` e `data-jp-item-field` su item di array." },
+                      { "id": "r-5",  "col1": "**Image Picker**",        "col2": "Campo immagine = oggetto `{ url, alt? }` con sub-schema `.describe('ui:image-picker')`; `resolveAssetUrl` + `data-jp-field` in View." },
+                      { "id": "r-6",  "col1": "**types.ts**",            "col2": "SectionComponentPropsMap (header con menu), augmentation, PageConfig, SiteConfig, MenuConfig, ThemeConfig." },
+                      { "id": "r-7",  "col1": "**Registry**",            "col2": "Tutti i tipi mappati al componente; tipo registry come in Appendix A." },
+                      { "id": "r-8",  "col1": "**SECTION_SCHEMAS**",     "col2": "Un entry per tipo (schema data); re-export base schemas." },
+                      { "id": "r-9",  "col1": "**addSectionConfig**",    "col2": "addableSectionTypes, sectionTypeLabels, getDefaultSectionData." },
+                      { "id": "r-10", "col1": "**Config**",              "col2": "tenantId, registry, schemas, pages, siteConfig, themeConfig, menuConfig, themeCss, addSection." },
+                      { "id": "r-11", "col1": "**TOCC**",                "col2": "CSS overlay per `[data-jp-section-overlay]`, hover, selected, type label." }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g-8",
+            "anchor": "riferimenti",
+            "label": "8. Riferimenti spec",
+            "sections": [
+              {
+                "id": "s-8-1",
+                "anchor": "spec-refs",
+                "title": "Documenti di riferimento",
+                "blocks": [
+                  {
+                    "id": "b-10-1",
+                    "type": "list",
+                    "content": "",
+                    "items": [
+                      { "id": "sp-1", "text": "**Architettura e ICE:** §1–§10 (MTRP, JSP, TBP, CIP, ECIP, IDAC, TOCC, BSDS, ASC, JEB)." },
+                      { "id": "sp-2", "text": "**Tipi e code-generation:** Appendix A (Core types, Tenant types, Schema contract, File paths, Integration checklist)." },
+                      { "id": "sp-3", "text": "**Admin:** JAP (Studio topology, Working Draft, Bake, overlay, Green Build)." }
+                    ]
+                  },
+                  {
+                    "id": "b-10-2",
+                    "type": "callout",
+                    "content": "Usando questo percorso hai **governance** piena: tipi, schema, editor, Add Section e overlay allineati alle spec v1.2. Per le versioni con tutti i Perché servono usa il file **JSONPAGES_Specs_v1.2_completo.md**."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "settings": {}
+    }
+  ]
+}

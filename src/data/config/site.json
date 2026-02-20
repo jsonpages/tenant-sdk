@@ -1,0 +1,84 @@
+{
+  "identity": {
+    "title": "JsonPages",
+    "logoUrl": "/logo.svg"
+  },
+  "pages": [
+    {
+      "slug": "home",
+      "label": "Home"
+    },
+    {
+      "slug": "docs",
+      "label": "Docs"
+    },
+    {
+      "slug": "architecture",
+      "label": "Architecture"
+    },
+    {
+      "slug": "usage",
+      "label": "Usage"
+    }
+  ],
+  "header": {
+    "id": "global-header",
+    "type": "header",
+    "data": {
+      "logoText": "Json",
+      "logoHighlight": "Pages",
+      "logoIconText": "{ }",
+      "links": [
+        {
+          "label": "Architecture",
+          "href": "#architecture"
+        },
+        {
+          "label": "CMS",
+          "href": "#cms"
+        },
+        {
+          "label": "Versioning",
+          "href": "#git"
+        },
+        {
+          "label": "Developer",
+          "href": "#devex"
+        }
+      ]
+    },
+    "settings": {
+      "sticky": true
+    }
+  },
+  "footer": {
+    "id": "global-footer",
+    "type": "footer",
+    "data": {
+      "brandText": "Json",
+      "brandHighlight": "Pages",
+      "copyright": "© 2026 Guido Filippo Serio.  Source-available · Free to use.",
+      "links": [
+        {
+          "label": "Docs",
+          "href": "/docs"
+        },
+        {
+          "label": "NPM",
+          "href": "https://www.npmjs.com/org/jsonpages"
+        },
+        {
+          "label": "GitHub",
+          "href": "https://github.com/jsonpages"
+        },
+        {
+          "label": "Changelog",
+          "href": "#"
+        }
+      ]
+    },
+    "settings": {
+      "showLogo": true
+    }
+  }
+}
